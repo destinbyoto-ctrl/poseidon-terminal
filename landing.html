@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poseidon — Terminal de trading IA · Bots automatisés, crypto, forex & indices</title>
+<meta name="description" content="Poseidon : terminal de trading intelligent avec bots IA automatisés, graphiques en direct, copieur de signaux MT4/MT5, Deriv et Binance. Mode démo gratuit, garde-fous intégrés.">
+<style>
+:root{
+  --bg:#070d1a; --bg2:#0b1424; --card:#0f1b30; --line:#1c2c47;
+  --txt:#e8eefc; --txt2:#9db1d4; --txt3:#5f739a;
+  --teal:#14d8b8; --teal2:#0aa892; --blue:#2f6bff; --amber:#e8b84a;
+  --up:#22c58b; --dn:#f0616d; --grad:linear-gradient(135deg,#14d8b8,#2f6bff);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;overflow-x:hidden}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.mono{font-family:ui-monospace,'Cascadia Mono',Consolas,monospace}
+/* NAV */
+nav{position:sticky;top:0;z-index:50;background:rgba(7,13,26,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.navin{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;max-width:1080px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:.04em;text-decoration:none;color:var(--txt)}
+.logoi{width:34px;height:34px;border-radius:10px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:17px}
+.logo b{color:var(--teal)}
+.nlinks{display:flex;gap:26px}
+.nlinks a{color:var(--txt2);text-decoration:none;font-size:14px;font-weight:600}
+.nlinks a:hover{color:var(--txt)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--grad);color:#04121c;font-weight:800;padding:12px 22px;border-radius:12px;text-decoration:none;font-size:14px;border:none;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(20,216,184,.35)}
+.btn.ghost{background:transparent;color:var(--txt2);border:1px solid var(--line);box-shadow:none}
+.btn.ghost:hover{border-color:var(--teal);color:var(--txt)}
+/* HERO */
+.hero{position:relative;padding:72px 0 40px;overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.5;z-index:0}
+.herosh{position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 0%,transparent,rgba(7,13,26,.92) 70%,var(--bg) 100%);z-index:1}
+.heroin{position:relative;z-index:2;text-align:center}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(20,216,184,.4);background:rgba(20,216,184,.08);color:var(--teal);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:7px 16px;border-radius:99px}
+h1{font-size:clamp(34px,6vw,58px);font-weight:900;letter-spacing:-.02em;line-height:1.08;margin:22px 0 0}
+h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.sub{color:var(--txt2);font-size:17px;max-width:640px;margin:18px auto 0}
+.hcta{display:flex;gap:14px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+.hstats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:820px;margin:48px auto 0}
+.hstat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 10px}
+.hstat .v{font-size:clamp(18px,3vw,26px);font-weight:900;color:var(--teal)}
+.hstat .k{font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+/* SECTIONS */
+section{padding:72px 0}
+.sh{text-align:center;max-width:640px;margin:0 auto 44px}
+.sh .eyebrow{display:block;color:var(--teal);font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
+h2{font-size:clamp(26px,4.5vw,38px);font-weight:900;letter-spacing:-.02em}
+.sh p{color:var(--txt2);margin-top:12px;font-size:15px}
+.grid{display:grid;gap:16px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;transition:border-color .2s,transform .2s}
+.card:hover{border-color:rgba(20,216,184,.5);transform:translateY(-3px)}
+.card .ico{width:44px;height:44px;border-radius:12px;background:rgba(20,216,184,.1);border:1px solid rgba(20,216,184,.25);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
+.card h3{font-size:17px;font-weight:800;margin-bottom:8px}
+.card p{color:var(--txt2);font-size:13.5px}
+.card .tag{display:inline-block;margin-top:12px;font-size:11px;font-weight:700;color:var(--teal);background:rgba(20,216,184,.08);border:1px solid rgba(20,216,184,.25);padding:4px 10px;border-radius:99px}
+/* BOT CARDS */
+.bot .ico{background:rgba(47,107,255,.12);border-color:rgba(47,107,255,.35)}
+.bot .ico.g{background:rgba(34,197,139,.12);border-color:rgba(34,197,139,.35)}
+.bot .ico.a{background:rgba(232,184,74,.12);border-color:rgba(232,184,74,.35)}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.meta span{font-size:10.5px;color:var(--txt3);border:1px solid var(--line);border-radius:99px;padding:3px 10px}
+/* BROKERS */
+.bk{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.bcard{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:18px;padding:24px;text-align:center}
+.bcard .bi{font-size:30px}
+.bcard h3{font-size:18px;margin:10px 0 6px}
+.bcard p{color:var(--txt2);font-size:13px}
+.bcard .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--up);margin-right:6px;box-shadow:0 0 8px var(--up)}
+/* MARQUEE */
+.ticker{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg2);overflow:hidden;padding:14px 0;white-space:nowrap}
+.tickerin{display:inline-block;animation:slide 34s linear infinite;font-size:13px;font-weight:700}
+.tickerin span{margin:0 22px;color:var(--txt2)}
+.tickerin .up{color:var(--up)}
+.tickerin .dn{color:var(--dn)}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* SECURITY */
+.sec{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+/* FAQ */
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:12px;cursor:pointer}
+details summary{font-weight:700;font-size:15px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+details summary::after{content:'+';color:var(--teal);font-size:20px;font-weight:900}
+details[open] summary::after{content:'−'}
+details p{color:var(--txt2);font-size:13.5px;margin-top:12px}
+/* FOOTER */
+footer{border-top:1px solid var(--line);padding:44px 0 60px;background:var(--bg2)}
+.fin{text-align:center}
+.fin .fl{font-size:22px;font-weight:900;letter-spacing:.05em}
+.fin .fl b{color:var(--teal)}
+.fin p{color:var(--txt3);font-size:12.5px;max-width:640px;margin:10px auto 0}
+.disc{margin-top:26px;border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-size:11.5px;color:var(--txt3);background:var(--card)}
+@media(max-width:760px){
+  .nlinks{display:none}
+  .hstats{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<nav><div class="navin">
+  <a class="logo" href="#top"><span class="logoi">🔱</span>POSE<b>IDON</b></a>
+  <div class="nlinks">
+    <a href="#robots">Robots IA</a>
+    <a href="#marches">Marchés</a>
+    <a href="#brokers">Brokers</a>
+    <a href="#securite">Sécurité</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <a class="btn" href="https://destinbyoto-ctrl.github.io/poseidon/">Ouvrir l'app</a>
+</div></nav>
+
+<header class="hero" id="top">
+  <canvas id="cv"></canvas><div class="herosh"></div>
+  <div class="wrap heroin">
+    <span class="pill">⚡ Terminal de trading IA</span>
+    <h1>Trade avec la précision<br>d'une <em>machine disciplinée</em></h1>
+    <p class="sub">Poseidon réunit tes brokers Binance, Deriv et MT4/MT5 dans un seul terminal : robots IA automatisés, graphiques en direct, copieur de signaux et garde-fous stricts. Démo gratuite, sans installation.</p>
+    <div class="hcta">
+      <a class="btn" href="https://destinbyoto-ctrl.github.io/poseidon/">Lancer Poseidon</a>
+      <a class="btn ghost" href="#robots">Voir les robots</a>
+    </div>
+    <div class="hstats">
+      <div class="hstat"><div class="v mono">5</div><div class="k">Robots IA</div></div>
+      <div class="hstat"><div class="v mono">6</div><div class="k">Paires crypto scannées</div></div>
+      <div class="hstat"><div class="v mono">4 s</div><div class="k">Flux prix</div></div>
+      <div class="hstat"><div class="v mono">100%</div><div class="k">Gratuit</div></div>
+    </div>
+  </div>
+</header>
+
+<div class="ticker"><div class="tickerin" id="tk"></div></div>
+
+<section id="robots">
+  <div class="wrap">
+    <div class="sh">
+      <span class="eyebrow">Bots automatisés</span>
+      <h2>Une équipe de robots, chacun avec sa spécialité</h2>
+      <p>Tous tes bots travaillent en parallèle, avec leurs propres seuils de confiance, TP/SL et limites de positions. Tu armes celui que tu veux.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card bot">
+        <div class="ico g">🟢</div>
+        <h3>Chasseur de vert</h3>
+        <p>Scalping ultra-rapide sur 6 paires : il ouvre des positions IA à forte confiance et les referme dès qu'elles touchent le vert. Cycle de 8 secondes, jamais fatigué.</p>
+        <div class="meta"><span>Cycle 8 s</span><span>TP +0,35%</span><span>Max 4 positions</span></div>
+      </div>
+      <div class="card bot">
+        <div class="ico">🚀</div>
+        <h3>Momentum ML hybride</h3>
+        <p>Score multi-indicateurs (RSI, MACD, ATR, ROC) mélangé à ton modèle ML. Un signal toutes les 2 minutes : au-dessus du seuil de confiance, la position part seule.</p>
+        <div class="meta"><span>Signal / 2 min</span><span>Seuil 65%</span><span>Max 2 positions</span></div>
+      </div>
+      <div class="card bot">
+        <div class="ico">🔄</div>
+        <h3>RSI Mean Reversion</h3>
+        <p>Il achète les surventes extrêmes avec confirmation de momentum et revend au retour à la moyenne. Signale aussi les surachats.</p>
+        <div class="meta"><span>Scan / min</span><span>RSI &lt; 25</span><span>TP +1,5%</span></div>
+      </div>
+      <div class="card bot">
+        <div class="ico a">🎯</div>
+        <h3>Sniper Élite BTC</h3>
+        <p>Sur BTCUSDT uniquement : il attend la confluence parfaite — momentum 1 min + tendance 5 min + pic de volume + RSI sain + ML. Sans confluence, il ne tire pas.</p>
+        <div class="meta"><span>BTCUSDT</span><span>Scan / 30 s</span><span>Un tir à la fois</span></div>
+      </div>
+      <div class="card bot">
+        <div class="ico a">🪙</div>
+        <h3>Accumulateur BTC</h3>
+        <p>DCA automatique sur Bitcoin : achats réguliers programmés, avec renforts quand le marché baisse. Pour construire une position long terme sans y penser.</p>
+        <div class="meta"><span>DCA</span><span>Achats programmés</span><span>Renfort baisse</span></div>
+      </div>
+      <div class="card bot">
+        <div class="ico">🧠</div>
+        <h3>Modèle ML intégré</h3>
+        <p>Un moteur de machine learning tourne directement dans ton navigateur. Entraîne-le sur l'historique réel des marchés et les bots l'utilisent pour leurs signaux.</p>
+        <div class="meta"><span>Pur JS</span><span>Entraînement local</span><span>Aucune donnée envoyée</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="marches" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="sh">
+      <span class="eyebrow">Marchés</span>
+      <h2>Crypto, indices de volatilité, forex</h2>
+      <p>Un seul terminal pour tous tes instruments, avec graphique TradingView intégré et flux prix toutes les 4 secondes.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card">
+        <div class="ico">₿</div>
+        <h3>Crypto (Binance)</h3>
+        <p>BTC, ETH, BNB, SOL, XRP, DOGE — spot, avec vrai mode réel via tes clés API ou mode papier simulé avec frais réalistes.</p>
+        <span class="tag">Réel &amp; papier</span>
+      </div>
+      <div class="card">
+        <div class="ico">📉</div>
+        <h3>Indices de volatilité (Deriv)</h3>
+        <p>Les indices synthétiques R_10 à R_100, 24h/24, directement depuis ton compte Deriv sans abonnement MetaAPI.</p>
+        <span class="tag">Deriv direct</span>
+      </div>
+      <div class="card">
+        <div class="ico">💱</div>
+        <h3>Forex &amp; métaux (MT4/MT5)</h3>
+        <p>Copieur de signaux avec mapping de symboles intelligent : GOLD devient XAUUSD automatiquement. Garde-fous et SL/TP forcés.</p>
+        <span class="tag">Copieur</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="brokers">
+  <div class="wrap">
+    <div class="sh">
+      <span class="eyebrow">Brokers</span>
+      <h2>Trois brokers, un seul espace</h2>
+      <p>Chaque broker a son espace dédié : son solde, son P&amp;L, ses positions et ses réglages propres. Aucun mélange.</p>
+    </div>
+    <div class="bk">
+      <div class="bcard"><div class="bi">🟡</div><h3>Binance</h3><p><span class="dot"></span>Crypto spot · robots IA · DCA · mode réel via clés API</p></div>
+      <div class="bcard"><div class="bi">🔴</div><h3>Deriv</h3><p><span class="dot"></span>Indices de volatilité · stratégies IA · trading direct sans abonnement</p></div>
+      <div class="bcard"><div class="bi">🔵</div><h3>MT4 / MT5</h3><p><span class="dot"></span>Copieur de signaux · exécution réelle MetaAPI · garde-fous stricts</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="securite" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="sh">
+      <span class="eyebrow">Sécurité</span>
+      <h2>Le mode démo d'abord. Toujours.</h2>
+      <p>Aucun ordre réel ne part sans ton autorisation explicite. Voici comment Poseidon protège ton capital.</p>
+    </div>
+    <div class="sec">
+      <div class="card">
+        <div class="ico">🛡️</div>
+        <h3>Switch par broker</h3>
+        <p>« Trading autonome » à activer séparément pour chaque broker. Sans lui, aucun bot n'exécute, même en démo.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🚧</div>
+        <h3>SL/TP obligatoires</h3>
+        <p>Chaque position ouverte par un bot part avec sa prise et sa coupe. Les seuils de risque s'appliquent avant toute exécution.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🔒</div>
+        <h3>Clés sur ton appareil</h3>
+        <p>Token et clés API restent dans le stockage local de ton navigateur. Rien n'est envoyé sur un serveur tiers.</p>
+      </div>
+      <div class="card">
+        <div class="ico">📊</div>
+        <h3>Papier réaliste</h3>
+        <p>Le mode papier simule les frais de Binance (0,1% par côté) pour des statistiques honnêtes avant le réel.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap" style="max-width:760px">
+    <div class="sh">
+      <span class="eyebrow">FAQ</span>
+      <h2>Questions fréquentes</h2>
+    </div>
+    <details><summary>Poseidon est-il gratuit ?</summary><p>Oui, entièrement. L'application tourne dans ton navigateur, il n'y a ni abonnement ni commission. Seuls les frais standard de ton broker s'appliquent en mode réel.</p></details>
+    <details><summary>Comment activer le trading réel ?</summary><p>Chaque broker a sa carte de connexion dans Réglages (token Deriv, compte MetaAPI, clés Binance). Après connexion, arme le switch « Trading autonome » du broker concerné. Jusque-là, tout reste en mode papier.</p></details>
+    <details><summary>Est-ce que je dois laisser la page ouverte ?</summary><p>Oui, Poseidon fonctionne dans ton navigateur : les bots tournent tant que la page est ouverte. Ferme-la et tout s'arrête proprement, tes données restent sauvegardées localement.</p></details>
+    <details><summary>Le modèle ML, comment ça marche ?</summary><p>Un clic sur « Entraîner l'IA » et il apprend sur l'historique réel des bougies (RSI, MACD, volume, momentum). Les bots combinent ensuite cette prédiction avec leurs propres indicateurs.</p></details>
+    <details><summary>Le trading comporte-t-il des risques ?</summary><p>Bien sûr. Le mode automatique n'élimine jamais le risque de perte : les robots suivent des règles strictes, mais aucun système ne garantit un profit. Commence toujours en démo.</p></details>
+  </div>
+</section>
+
+<footer><div class="wrap fin">
+  <div class="fl">POSE<span style="color:var(--teal)">IDON</span></div>
+  <p>Terminal de trading personnel · bots IA · copieur de signaux · Binance · Deriv · MT4/MT5</p>
+  <p style="margin-top:6px"><a href="https://destinbyoto-ctrl.github.io/poseidon/" style="color:var(--teal);text-decoration:none;font-weight:700">Ouvrir l'application →</a></p>
+  <div class="disc">⚠️ Avertissement sur les risques : le trading de cryptomonnaies, forex et indices comporte un risque élevé de perte en capital. Les performances passées et le mode démo ne préjugent pas des résultats réels. Poseidon est un outil personnel d'aide à la décision ; tu restes seul responsable de tes ordres.</div>
+</div></footer>
+
+<script>
+/* graphique animé du hero */
+(function(){
+  const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+  let W,H,pts=[];let t=0;
+  function rs(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight;pts=[];for(let i=0;i<90;i++)pts.push({x:i/89,y:.4+Math.sin(i*.3)*.06+Math.sin(i*.07)*.08});}
+  window.addEventListener('resize',rs);rs();
+  (function draw(){
+    t+=.012;
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle='rgba(20,216,184,.55)';ctx.lineWidth=2;ctx.beginPath();
+    pts.forEach((p,i)=>{const y=H*(p.y+Math.sin(i*.15+t)*.02);i?ctx.lineTo(p.x*W,y):ctx.moveTo(p.x*W,y);});
+    ctx.stroke();
+    ctx.strokeStyle='rgba(47,107,255,.3)';ctx.lineWidth=1.5;ctx.beginPath();
+    pts.forEach((p,i)=>{const y=H*(p.y+Math.cos(i*.12+t*.8)*.03);i?ctx.lineTo(p.x*W,y):ctx.moveTo(p.x*W,y);});
+    ctx.stroke();
+    const gl=ctx.createLinearGradient(0,H*.3,0,H);
+    gl.addColorStop(0,'rgba(20,216,184,.12)');gl.addColorStop(1,'transparent');
+    ctx.fillStyle=gl;ctx.beginPath();ctx.moveTo(0,H);
+    pts.forEach((p,i)=>ctx.lineTo(p.x*W,H*(p.y+Math.sin(i*.15+t)*.02)));
+    ctx.lineTo(W,H);ctx.fill();
+    requestAnimationFrame(draw);
+  })();
+})();
+/* ticker de marché */
+(function(){
+  const d=[['BTC',67450,1.2],['ETH',3150,-0.6],['BNB',592,2.1],['SOL',148,0.8],['XRP',0.62,-1.1],['DOGE',0.148,3.4]];
+  const tk=document.getElementById('tk');
+  let h='';
+  for(let r=0;r<2;r++)d.forEach(x=>{h+='<span>'+x[0]+' <b class="'+(x[2]>=0?'up':'dn')+'">'+x[1].toLocaleString('fr-FR')+' '+(x[2]>=0?'+':'')+x[2]+'%</b></span>';});
+  tk.innerHTML=h;
+})();
+</script>
+</body>
+</html>
